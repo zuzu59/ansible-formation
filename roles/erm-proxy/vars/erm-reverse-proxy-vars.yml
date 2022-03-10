@@ -3,3 +3,19 @@ erm_git_uri: git@github.com:epfl-si/erm-proxy
 erm_ssh_secret_key_path: /keybase/team/epfl_catalyse.iam/ssh-clone/
 erm_docker_clone_credentials_path: /keybase/team/epfl_catalyse.iam/epflclonebot.yml
 erm_proxy_service_name: erm-proxy
+
+erm_environments:
+  prod:
+    - name: prod
+      route_name: erm-test-prod  # I suppose we could change this...
+      service_name: erm-proxy-prod
+      hostname: "erm.epfl.ch"
+  test: 
+    - name: test
+      route_name: erm-test
+      service_name: erm-proxy-test
+      hostname: "erm-test.epfl.ch"
+    - name: test-proj
+      route_name: erm-test-proj
+      service_name: erm-proxy-test-proj
+      hostname: "erm-test-proj.epfl.ch"

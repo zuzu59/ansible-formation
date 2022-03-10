@@ -8,20 +8,19 @@
       apiVersion: route.openshift.io/v1
       kind: Route
       metadata:
-        name: "{{ _route_name }}"
+        name: "{{ item.route_name }}"
         namespace: "{{ openshift_namespace }}"
         labels:
           epfl.ch/visibility: "{{ 'public' if inventory_environment == 'prod' else 'private' }}"
       spec:
-        host: "erm-test.epfl.ch"
+        host: "{{ item.hostname }}"
         port:
           targetPort: 8443-tcp
         tls:
           termination: passthrough
         to:
           kind: Service
-          name: "{{ erm_proxy_service_name }}-{{ inventory_environment }}"
-  vars:
-    - _route_name: "erm-{{ inventory_environment}}"
+          name: "{{ item.service_name }}"
+  with_items: "{{ erm_environments[inventory_environment] }}"
   tags:
     - erm.routes
