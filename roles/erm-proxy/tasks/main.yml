@@ -1,5 +1,5 @@
 - include_tasks:
-    file: erm-reverse-proxy.yml
+    file: erm-reverse-proxy-build.yml
     apply:
       tags: erm
   tags:
