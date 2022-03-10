@@ -44,6 +44,7 @@ platform_check () {
             SUITCASE_PIP_EXTRA="bcrypt passlib openshift" \
             SUITCASE_ANSIBLE_REQUIREMENTS=requirements.yml \
             SUITCASE_NO_EYAML=1 \
+            SUITCASE_PYTHON_VERSIONS="3.8.5 3.8.2 3.8.9 3.9.7" \
             bash -x
     fi
     export PATH="$PWD/ansible-deps-cache/bin:$PATH"
