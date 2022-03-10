@@ -10,6 +10,29 @@
     metadata:
       namespace: "{{ openshift_namespace }}"
       name: "{{ erm_image_name }}"
-    from: httpd:2.4
     git:
-        repository: "{{ erm_git_uri }}"
+      repository: "{{ erm_git_uri }}"
+    spec:
+      resources:
+        limits:
+          cpu: '1'
+          memory: 100M
+  register: _erm_imagestream
+
+- name: Re-build now in OpenShift
+  shell:
+    cmd: "oc -n {{ openshift_namespace }} start-build --wait {{ erm_image_name }}"
+  register: "_build_id"
+  when:
+    - >
+      (
+        _erm_imagestream | default(False)
+        and
+        (_erm_imagestream is changed)
+      )
+      or
+      "erm.build" in ansible_run_tags
+    - >-
+      inventory_environment == "test"
+  tags:
+    - erm.build
