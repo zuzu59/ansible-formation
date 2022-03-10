@@ -51,6 +51,14 @@ platform_check () {
     export PATH="$PWD/ansible-deps-cache/bin:$PATH"
     export ANSIBLE_ROLES_PATH="$PWD/ansible-deps-cache/roles"
     export ANSIBLE_COLLECTIONS_PATHS="$PWD/ansible-deps-cache"
+    oc_check
+}
+
+oc_check () {
+  if ! oc projects >/dev/null 2>&1; then
+    echo "Please login to openshift:"
+    oc login
+  fi
 }
 
 inventory_mode="test"
