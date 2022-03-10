@@ -1,7 +1,7 @@
 - tags: always
   include_vars: erm-reverse-proxy-vars.yml
 
-- name: erm-proxy build secrets
+- name: 'erm-proxy build secret #1: `git clone` credentials'
   openshift:
     state: latest
     apiVersion: v1
@@ -23,8 +23,57 @@
   when:
     - >-
       inventory_environment == "test"
+  register: _erm_proxy_build_secret_1
   tags:
     - erm.build
+
+- name: 'erm-proxy build secret #2: Docker Hub credentials'
+  openshift:
+    state: latest
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: docker-hub-credentials
+      namespace: '{{ openshift_namespace }}'
+    type: kubernetes.io/dockerconfigjson
+    data:
+      .dockerconfigjson: "{{ _docker_auths_dict | to_json | b64encode }}"
+  vars:
+    _docker_auths_dict:
+      # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      auths:
+        "https://index.docker.io/v1/":
+          "auth": "{{ _loginpassword | b64encode }}"
+    _loginpassword: "{{ _epflclonebot_secrets.username }}:{{ _epflclonebot_secrets.password }}"
+    _epflclonebot_secrets: >-
+      {{ lookup("pipe", "keybase fs read {{ erm_docker_clone_credentials_path }}") | from_yaml }}
+  when:
+    - >-
+      inventory_environment == "test"
+  register: _erm_proxy_build_secret_2
+  tags:
+    - erm.build
+
+- name: "`oc secrets link` into the {{ _builder_service_account }} service account"
+  shell:
+    cmd: |
+      set -e -x
+      case "$(oc -n {{ openshift_namespace }} get -o yaml \
+                 serviceaccount {{ _builder_service_account }})" in
+        *"- name: {{ _docker_hub_secret_name }}"*)
+          echo "ALREADY_LINKED"
+          exit 0;;
+        *)
+        oc -n {{ openshift_namespace }} secrets link {{ _builder_service_account }} {{ _docker_hub_secret_name }} --for=pull
+      esac
+  vars:
+    _docker_hub_secret_name: docker-hub-credentials
+    _builder_service_account: builder  # And not `default`, as incorrectly blogged about
+  register: _oc_secrets_link
+  changed_when: >-
+    _oc_secrets_link
+    and
+    ( "ALREADY_LINKED" not in _oc_secrets_link.stdout )
 
 - name: Build in OpenShift
   # Build in test only (and promote to production):
@@ -53,11 +102,13 @@
   register: "_build_id"
   when:
     - >
-      (
-        _erm_imagestream | default(False)
-        and
-        (_erm_imagestream is changed)
-      )
+      ( (_erm_imagestream | default({})) is changed )
+      or
+      ( (_erm_proxy_build_secret_1 | default({})) is changed )
+      or
+      ( (_erm_proxy_build_secret_2 | default({})) is changed )
+      or
+      ( (_oc_secrets_link | default({})) is changed )
       or
       "erm.build" in ansible_run_tags
     - >-
