@@ -1,6 +1,30 @@
 - tags: always
   include_vars: erm-reverse-proxy-vars.yml
 
+- name: erm-proxy build secrets
+  openshift:
+    state: latest
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ssh-key-for-erm-proxy-git-clone
+      namespace: '{{ openshift_namespace }}'
+    type: kubernetes.io/ssh-auth
+    data:
+      ssh-privatekey: '{{ _id_rsa | b64encode }}'
+      known_hosts: '{{ _known_hosts | b64encode }}'
+  vars:
+    # Be sure that `_id_rsa` ends with a newline, lest OpenShift silently fail
+    # to use it!
+    _id_rsa: |
+      {{ lookup("pipe", "keybase fs read {{ erm_ssh_secret_key_path }}/id_rsa") }}
+
+    _known_hosts: '{{ lookup("pipe", "ssh-keyscan github.com 2>/dev/null | sort") }}'
+  when:
+    - >-
+      inventory_environment == "test"
+  tags:
+    - erm.checkouter
 
 - name: Build in OpenShift
   # Build in test only (and promote to production):
@@ -14,6 +38,9 @@
     git:
       repository: "{{ erm_git_uri }}"
     spec:
+      source:
+        sourceSecret:
+          name: "ssh-key-for-erm-proxy-git-clone"
       resources:
         limits:
           cpu: '1'
