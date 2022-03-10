@@ -1,5 +1,6 @@
 - tags: always
-  include_vars: vars/erm-reverse-proxy-vars.yml
+  include_vars: erm-reverse-proxy-vars.yml
+
 
 - name: Build in OpenShift
   # Build in test only (and promote to production):
