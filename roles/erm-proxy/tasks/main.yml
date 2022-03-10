@@ -6,3 +6,11 @@
     - erm
     - erm.build
     - erm.rebuild
+
+- include_tasks:
+    file: erm-reverse-proxy-deploy.yml
+    apply:
+      tags: erm
+  tags:
+    - erm
+    - erm.routes
