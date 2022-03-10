@@ -1,6 +1,27 @@
 - tags: always
   include_vars: erm-reverse-proxy-vars.yml
 
+- name: Services
+  community.kubernetes.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: "{{ item.service_name }}"
+        namespace: "{{ openshift_namespace }}"
+      spec:
+        ports:
+          - name: 8443-tcp
+            port: 8443
+            protocol: TCP
+            targetPort: 8443
+        selector:
+          deploymentconfig: "{{ item.deployment_config_name }}"
+  with_items: "{{ erm_environments[inventory_environment] }}"
+  tags:
+    - erm.services
+
 - name: Routes
   community.kubernetes.k8s:
     state: present
