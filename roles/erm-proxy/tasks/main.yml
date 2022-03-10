@@ -1,0 +1,9 @@
+# Catalyse ERM reverse-proxy built out of Apache and mod_auth_tequila
+
+- include_tasks:
+    file: erm-reverse-proxy.yml
+    apply:
+      tags: erm
+  tags:
+    - erm
+

@@ -1,0 +1,6 @@
+- name: erm-proxy
+  hosts: all
+  gather_facts: no
+  roles:
+    - role: roles/erm-proxy
+

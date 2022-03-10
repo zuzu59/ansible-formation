@@ -1,0 +1,15 @@
+- tags: always
+  include_vars: vars/erm-reverse-proxy-vars.yml
+
+- name: Build in OpenShift
+  # Build in test only (and promote to production):
+  when: >-
+    inventory_environment == "test"
+  openshift_imagestream:
+    state: latest
+    metadata:
+      namespace: "{{ openshift_namespace }}"
+      name: "{{ erm_image_name }}"
+    from: httpd:2.4
+    git:
+        repository: "{{ erm_git_uri }}"
