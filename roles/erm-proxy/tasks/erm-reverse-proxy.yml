@@ -24,7 +24,7 @@
     - >-
       inventory_environment == "test"
   tags:
-    - erm.checkouter
+    - erm.build
 
 - name: Build in OpenShift
   # Build in test only (and promote to production):
@@ -63,4 +63,4 @@
     - >-
       inventory_environment == "test"
   tags:
-    - erm.build
+    - erm.rebuild
