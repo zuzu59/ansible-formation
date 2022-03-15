@@ -4,3 +4,9 @@
   roles:
     - role: roles/erm-proxy
 
+- name: Sativa
+  hosts: all
+  gather_facts: no
+  roles:
+    - role: roles/sativa
+

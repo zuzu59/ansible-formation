@@ -1,0 +1,35 @@
+# Deploy Satosa and dependencies (configuration file, secrets) to OpenShift
+- tags: all
+  include_vars: sativa-vars.yml
+
+- name: DeploymentConfig for Satosa
+  openshift:
+    state: latest
+    apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      name: sativa
+      namespace: '{{ openshift_namespace }}'
+    spec:
+      replicas: 1
+      selector:
+        deployment-config.name: sativa
+      # `strategy:` configures resources and other parameters for
+      # the upgrade process.
+      strategy:
+        resources:
+          limits:
+            memory: 100Mi
+      template:
+        metadata:
+          labels:
+            deployment-config.name: sativa
+        spec:
+          containers:
+            - name: satosa
+              image: "{{ satosa_image }}"
+              resources:
+                limits:
+                  memory: 100Mi
+                requests:
+                  memory: 50Mi

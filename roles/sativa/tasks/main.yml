@@ -1,0 +1,6 @@
+- include_tasks:
+    file: sativa-satosa.yml
+    apply:
+      tags: sativa
+  tags:
+    - sativa
