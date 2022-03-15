@@ -43,6 +43,24 @@
     _openssl_cert: >-
       {{ _openssl_newcert.split("-----END PRIVATE KEY-----")[1] }}
 
+- name: Tequila's certificate (protects the SAML2 .xml config download)
+  openshift:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: tequila-certificate
+      namespace: "{{ openshift_namespace }}"
+    type: Opaque
+    data:
+      tequila.pem: '{{ _tequila_cert | b64encode }}'
+  vars:
+    _tequila_cert: >-
+      {{ lookup("pipe",
+      "
+      openssl s_client -showcerts -connect {{ sativa_tequila_server }}:443 </dev/null 2>/dev/null |
+      sed -n '/^-----BEGIN CERTIFICATE-----/,/^-----END CERTIFICATE-----/p;/^-----END CERTIFICATE-----/q'
+      ")}}
+
 - name: DeploymentConfig for Satosa
   openshift:
     apiVersion: apps.openshift.io/v1
@@ -80,6 +98,8 @@
                   mountPath: /opt/satosa/etc
                 - name: satosa-certificate
                   mountPath: /opt/satosa/ssl
+                - name: tequila-certificate
+                  mountPath: /opt/satosa/tequila
               env:
                 - name: DATA_DIR
                   value: /opt/satosa/etc
@@ -100,3 +120,6 @@
             - name: satosa-certificate
               secret:
                 secretName: satosa-certificate
+            - name: tequila-certificate
+              secret:
+                secretName: tequila-certificate

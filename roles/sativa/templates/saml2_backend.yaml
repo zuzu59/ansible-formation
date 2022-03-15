@@ -25,8 +25,8 @@ config:
 
     metadata:
       remote:
-        - url: "https://test-tequila.epfl.ch/metadata.test-tequila-IdP.xml"
-          cert: /data/ssl/tequila-dev.pem
+        - url: "https://{{ sativa_tequila_server }}/metadata.test-tequila-IdP.xml"
+          cert: /opt/satosa/tequila/tequila.pem
 
     entityid: "<base_url>/<name>/proxy_saml2_backend.xml"
     accepted_time_diff: 60
