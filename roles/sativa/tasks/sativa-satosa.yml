@@ -12,6 +12,36 @@
     data:
       proxy_conf.yaml: >-
         {{ lookup("template", "proxy_conf.yaml") }}
+      saml2_backend.yaml: >-
+        {{ lookup("template", "saml2_backend.yaml") }}
+      saml2_frontend.yaml: >-
+        {{ lookup("template", "saml2_frontend.yaml") }}
+      internal_attributes.yaml: >-
+        {{ lookup("template", "internal_attributes.yaml") }}
+
+- name: X509 self-signed certificate and key for Satosa
+  openshift:
+    state: present
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: satosa-certificate
+      namespace: "{{ openshift_namespace }}"
+    type: Opaque
+    data:
+      metadata.key: '{{ _openssl_key | b64encode }}'
+      metadata.crt: '{{ _openssl_cert | b64encode }}'
+      frontend.key: '{{ _openssl_key | b64encode }}'
+      frontend.crt: '{{ _openssl_cert | b64encode }}'
+      backend.key: '{{ _openssl_key | b64encode }}'
+      backend.crt: '{{ _openssl_cert | b64encode }}'
+  vars:
+    _openssl_newcert: >-
+      {{ lookup("pipe", "openssl req -batch -x509 -subj '/CN={{ sativa_server_hostname }}' -new -nodes -out /dev/stdout -keyout /dev/stdout 2>/dev/null") }}
+    _openssl_key: >-
+      {{ _openssl_newcert.split("-----BEGIN CERTIFICATE-----")[0] }}
+    _openssl_cert: >-
+      {{ _openssl_newcert.split("-----END PRIVATE KEY-----")[1] }}
 
 - name: DeploymentConfig for Satosa
   openshift:
@@ -43,5 +73,30 @@
                   memory: 100Mi
                 requests:
                   memory: 50Mi
-              volumes:
-                # TODO: ${PWD}/satosa:/data
+              volumeMounts:
+                - name: satosa-config
+                  mountPath: "{{ satosa_configmap_mountpoint }}"
+                - name: satosa-etc
+                  mountPath: /opt/satosa/etc
+                - name: satosa-certificate
+                  mountPath: /opt/satosa/ssl
+              env:
+                - name: DATA_DIR
+                  value: /opt/satosa/etc
+              command:
+                - bash
+                - -x
+                - -c
+                - |-
+                  ln -s /opt/satosa/config/* /opt/satosa/etc/
+                  ln -s /opt/satosa/ssl/* /opt/satosa/etc/
+                  exec bash -x /start.sh
+          volumes:
+            - name: satosa-config
+              configMap:
+                name: satosa
+            - name: satosa-etc
+              emptyDir: {}
+            - name: satosa-certificate
+              secret:
+                secretName: satosa-certificate

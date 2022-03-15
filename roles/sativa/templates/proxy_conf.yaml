@@ -7,16 +7,13 @@ STATE_ENCRYPTION_KEY: "asdASD123"
 cookies_samesite_compat:
   - ["SATOSA_STATE", "SATOSA_STATE_LEGACY"]
 
-INTERNAL_ATTRIBUTES: "/data/internal_attributes.yaml"
+INTERNAL_ATTRIBUTES: "{{ satosa_configmap_mountpoint }}/internal_attributes.yaml"
 
 BACKEND_MODULES:
-  - "/data/plugins/saml2_backend.yaml"
+  - "{{ satosa_configmap_mountpoint }}/saml2_backend.yaml"
 
 FRONTEND_MODULES:
-  - "/data/plugins/saml2_frontend.yml"
-
-MICRO_SERVICES:
-  - "/data/plugins/microservices/static_attributes.yaml"
+  - "{{ satosa_configmap_mountpoint }}/saml2_frontend.yaml"
 
 LOGGING:
   version: 1
