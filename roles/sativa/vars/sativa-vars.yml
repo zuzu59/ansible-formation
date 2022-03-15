@@ -1,1 +1,3 @@
 satosa_image: satosa/satosa:v7.0.3
+
+sativa_server_hostname: catalyse-login.epfl.ch

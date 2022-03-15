@@ -2,6 +2,18 @@
 - tags: all
   include_vars: sativa-vars.yml
 
+- name: ConfigMap for Satosa
+  openshift:
+    state: latest
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: satosa
+      namespace: "{{ openshift_namespace }}"
+    data:
+      proxy_conf.yaml: >-
+        {{ lookup("template", "proxy_conf.yaml") }}
+
 - name: DeploymentConfig for Satosa
   openshift:
     state: latest
@@ -33,3 +45,5 @@
                   memory: 100Mi
                 requests:
                   memory: 50Mi
+              volumes:
+                # TODO: ${PWD}/satosa:/data
