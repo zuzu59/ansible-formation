@@ -3,7 +3,6 @@
 
 - name: 'erm-proxy build secret #1: `git clone` credentials'
   openshift:
-    state: latest
     apiVersion: v1
     kind: Secret
     metadata:
@@ -29,7 +28,6 @@
 
 - name: 'erm-proxy build secret #2: Docker Hub credentials'
   openshift:
-    state: latest
     apiVersion: v1
     kind: Secret
     metadata:
@@ -80,7 +78,6 @@
   when: >-
     inventory_environment == "test"
   openshift_imagestream:
-    state: latest
     metadata:
       namespace: "{{ openshift_namespace }}"
       name: "{{ erm_image_name }}"

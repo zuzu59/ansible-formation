@@ -4,7 +4,6 @@
 
 - name: ConfigMap for Satosa
   openshift:
-    state: latest
     apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -16,7 +15,6 @@
 
 - name: DeploymentConfig for Satosa
   openshift:
-    state: latest
     apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
