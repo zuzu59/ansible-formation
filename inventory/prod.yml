@@ -1,6 +1,6 @@
 all:
   hosts:
-    openshift-prod:
+    catalyse-prod:
       openshift_namespace: catalyse-prod
       ansible_connection: local
       ansible_python_interpreter: "{{ catiamsible_dir }}/ansible-deps-cache/bin/python3"

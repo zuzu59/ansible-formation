@@ -1,6 +1,6 @@
 all:
   hosts:
-    openshift-test:
+    catalyse-test:
       openshift_namespace: catalyse-test
       ansible_connection: local
       ansible_python_interpreter: "{{ catiamsible_dir }}/ansible-deps-cache/bin/python3"
