@@ -131,6 +131,17 @@
               secret:
                 secretName: tequila-certificate
 
+- name: Restart Satosa now
+  shell:
+    cmd: |-
+      oc -n {{ openshift_namespace }} rollout latest dc/sativa
+  when: >-
+    ("sativa.satosa.restart" in ansible_run_tags)
+    or
+    ( (_satosa_configmap | default({})) is changed )
+  tags:
+    - sativa.satosa.restart
+
 - name: Service for Statosa
   openshift:
     apiVersion: v1
