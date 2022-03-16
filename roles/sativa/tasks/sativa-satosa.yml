@@ -20,6 +20,8 @@
         {{ lookup("template", "internal_attributes.yaml") }}
       static_attributes.yaml: >-
         {{ lookup("template", "static_attributes.yaml") }}
+      saml2_ivalua.xml: >-
+        {{ lookup("template", "saml2_ivalua.xml") }}
 
 - name: X509 self-signed certificate and key for Satosa
   openshift:
