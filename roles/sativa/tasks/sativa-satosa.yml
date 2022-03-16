@@ -25,7 +25,15 @@
         {{ lookup("template", "TEST-samltest-id-sp.xml") }}
   register: _satosa_configmap
 
-- name: X509 self-signed certificate and key for Satosa
+- name: Generate keypair for SATOSA (in case we need one)
+  changed_when: false
+  delegate_to: localhost
+  shell:
+    cmd: |
+      openssl req -batch -x509 -subj '/CN={{ sativa_server_hostname }}' -new -nodes -out /dev/stdout -keyout /dev/stdout 2>/dev/null
+  register: _openssl_new_keypair
+
+- name: X509 self-signed certificate and key for SATOSA
   openshift:
     state: present
     apiVersion: v1
@@ -42,12 +50,10 @@
       backend.key: '{{ _openssl_key | b64encode }}'
       backend.crt: '{{ _openssl_cert | b64encode }}'
   vars:
-    _openssl_newcert: >-
-      {{ lookup("pipe", "openssl req -batch -x509 -subj '/CN={{ sativa_server_hostname }}' -new -nodes -out /dev/stdout -keyout /dev/stdout 2>/dev/null") }}
     _openssl_key: >-
-      {{ _openssl_newcert.split("-----BEGIN CERTIFICATE-----")[0] }}
+      {{ _openssl_new_keypair.stdout | extract_private_key }}
     _openssl_cert: >-
-      {{ _openssl_newcert.split("-----END PRIVATE KEY-----")[1] }}
+      {{ _openssl_new_keypair.stdout | extract_certificate }}
 
 - name: Tequila's certificate (protects the SAML2 .xml config download)
   openshift:
