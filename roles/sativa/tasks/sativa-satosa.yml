@@ -90,6 +90,9 @@
           containers:
             - name: satosa
               image: "{{ satosa_image }}"
+              ports:
+                - containerPort: 8000
+                  protocol: "TCP"
               resources:
                 limits:
                   memory: 100Mi
@@ -127,3 +130,21 @@
             - name: tequila-certificate
               secret:
                 secretName: tequila-certificate
+
+- name: Service for Statosa
+  openshift:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: satosa-service
+      namespace: "{{ openshift_namespace }}"
+      labels:
+        app: satosa-service
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8000
+      selector:
+        deployment-config.name: sativa
