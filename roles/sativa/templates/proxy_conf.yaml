@@ -1,4 +1,4 @@
-BASE: https://{{ sativa_server_hostname }}/
+BASE: https://{{ sativa_server_hostname }}
 
 COOKIE_STATE_NAME: "SATOSA_STATE"
 CONTEXT_STATE_DELETE: yes
