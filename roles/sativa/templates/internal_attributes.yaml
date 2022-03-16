@@ -15,7 +15,7 @@ attributes:
     orcid: [orcid]
     github: [id]
     openid: [sub]
-    saml: [eduPersonTargetedID]
+    saml: [eduPersonTargetedID,eduPersonUniqueId]
   givenname:
     facebook: [first_name]
     linkedin: [email-address]
