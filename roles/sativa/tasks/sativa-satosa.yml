@@ -148,3 +148,24 @@
           targetPort: 8000
       selector:
         deployment-config.name: sativa
+
+- name: Route for catalyse-login
+  openshift:
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: "satosa-route"
+      namespace: "{{ openshift_namespace }}"
+      labels:
+        app: satosa-route
+        epfl.ch/visibility: public
+    spec:
+      host: "catalyse-login.128.178.222.83.nip.io"
+      tls:
+        termination: edge
+      port:
+        targetPort: 8080-tcp
+      to:
+        kind: Service
+        name: satosa-service
+      wildcardPolicy: None

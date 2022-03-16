@@ -2,7 +2,10 @@ satosa_image: satosa/satosa:v7.0.3
 
 satosa_configmap_mountpoint: /opt/satosa/config
 
-sativa_server_hostname: catalyse-login.epfl.ch
+sativa_server_hostname: >-
+  {{ "catalyse-login.epfl.ch" if inventory_environment == "prod"
+  else "catalyse-login.128.178.222.83.nip.io"
+  }}
 
 sativa_tequila_server: >-
   {{ "tequila.epfl.ch" if inventory_environment == "prod"
