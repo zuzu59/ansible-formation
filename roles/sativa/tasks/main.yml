@@ -5,3 +5,18 @@
   tags:
     - sativa
     - sativa.satosa.restart
+
+- pause:
+    prompt: |
+      *******************************************************
+      * SATOSA backend → Tequila cryptographic introduction *
+      *******************************************************
+      
+      Please ensure that the {{ inventory_environment }} Tequila knows about
+      the SATOSA IdP-side (“backend”) identity, available at
+      https://{{ sativa_server_hostname }}/Sativa/proxy_saml2_backend.xml
+
+      This is a manual step. Press Enter when done...
+
+  tags:
+    - sativa
