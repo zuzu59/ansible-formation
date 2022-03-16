@@ -21,9 +21,9 @@ config:
       local: 
         # Generated from filling some forms at https://samltest.id/ and
         # ultimately downloaded from https://samltest.id/saml/sp:
-        - /data/samltest-id-sp.xml
+        - {{ satosa_configmap_mountpoint }}/TEST-samltest-id-sp.xml
         # From the test instance of iValua:
-        # - /data/otchoz.xml
+        # - {{ satosa_configmap_mountpoint }}/ivalua-id-sp.xml
 
     entityid: <base_url>/<name>/proxy.xml
     accepted_time_diff: 60

@@ -1,5 +1,6 @@
-
 <!-- This is the metadata for the SAMLtest SP, named by entityID --> 
+<!-- This file was obtained from https://samltest.id/download/ -->
+<!-- It only contains public information, and can therefore safely be committed to source control. -->
 
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="SAMLtestSP" validUntil="2100-01-01T00:00:42Z" entityID="https://samltest.id/saml/sp">
 
