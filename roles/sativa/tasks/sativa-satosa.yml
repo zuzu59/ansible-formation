@@ -30,6 +30,22 @@
         {{ lookup("template", "ivalua_account_activation_microservice.py") }}
   register: _satosa_configmap
 
+- name: API client Secret for Satosa
+  openshift:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: satosa-api-client
+      namespace: "{{ openshift_namespace }}"
+    data:
+      secrets.json: >-
+        {{ _secrets | to_json | b64encode }}
+  register: _satosa_secret
+  vars:
+    _secrets:
+      websrv_password: "{{ websrv_api.password }}"
+      catalyse_key: "{{ catalyse_api.key }}"
+
 - name: Generate keypair for SATOSA (in case we need one)
   changed_when: false
   delegate_to: localhost
@@ -114,6 +130,8 @@
               volumeMounts:
                 - name: satosa-config
                   mountPath: "{{ satosa_configmap_mountpoint }}"
+                - name: satosa-api-client-secrets
+                  mountPath: "{{ satosa_secrets_mountpoint }}"
                 - name: satosa-etc
                   mountPath: /opt/satosa/etc
                 - name: satosa-certificate
@@ -143,6 +161,9 @@
             - name: tequila-certificate
               secret:
                 secretName: tequila-certificate
+            - name: satosa-api-client-secrets
+              secret:
+                secretName: satosa-api-client
 
 - name: Restart Satosa now
   shell:
@@ -152,6 +173,8 @@
     ("sativa.satosa.restart" in ansible_run_tags)
     or
     ( (_satosa_configmap | default({})) is changed )
+    or
+    ( (_satosa_secret | default({})) is changed )
   tags:
     - sativa.satosa.restart
 

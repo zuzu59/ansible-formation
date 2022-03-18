@@ -31,7 +31,7 @@ LOGGING:
     stdout:
       class: logging.StreamHandler
       stream: "ext://sys.stdout"
-      level: "DEBUG"
+      level: "{{ "DEBUG" if inventory_environment == "test" else "INFO" }}"
       formatter: simple
     syslog:
       class: logging.handlers.SysLogHandler
@@ -70,6 +70,6 @@ LOGGING:
     oic:
       level: "DEBUG"
   root:
-    level: "DEBUG"
+    level: "INFO"  # Lest we leak e.g. secrets as part of API URLs
     handlers:
       - stdout

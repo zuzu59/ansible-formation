@@ -20,6 +20,9 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
     satosa_logging(logger, logging.DEBUG, json.dumps(config), None)
     self.websrv = config['epfl']['websrv']
     self.catalyse = config['epfl']['catalyse']
+    secrets_json_path = "{{ satosa_secrets_mountpoint }}/secrets.json"
+    self.secrets = json.loads(open(secrets_json_path).read())
+    satosa_logging(logger, logging.INFO, "Loaded secrets from %s" % secrets_json_path, None)
 
   def process(self, context, internal_response):
     """
@@ -56,7 +59,7 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
     qs = {
       'app': self.websrv['app_name'],
       'caller': self.websrv['app_caller'],
-      'password': self.websrv['app_password'],
+      'password': self.secrets['websrv_password'],
       'rightid': 'sig0000',
       'persid': sciper,
     }
@@ -78,7 +81,7 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
     return len(response['result']) > 0
 
   def postToCatalyse(self, sciper):
-    url = self.catalyse['url'] + 'User_VAL?apikey=' + self.catalyse['key']
+    url = self.catalyse['url'] + 'User_VAL?apikey=' + self.secrets['catalyse_key']
     payload = '<User_VALs><User_VAL><LOGIN_NAME>'+sciper+'</LOGIN_NAME></User_VAL></User_VALs>'
     headers = {'Content-Type': 'application/xml'}
 

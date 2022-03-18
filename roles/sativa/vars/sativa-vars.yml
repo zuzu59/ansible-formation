@@ -1,6 +1,7 @@
 satosa_image: satosa/satosa:v7.0.3
 
 satosa_configmap_mountpoint: /opt/satosa/config
+satosa_secrets_mountpoint: /opt/satosa/secrets
 
 sativa_server_hostname: >-
   {{ "catalyse-login.epfl.ch" if inventory_environment == "prod"
