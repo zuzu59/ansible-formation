@@ -20,9 +20,10 @@
         {{ lookup("template", "internal_attributes.yaml") }}
       static_attributes.yaml: >-
         {{ lookup("template", "static_attributes.yaml") }}
-      # TODO: remove once we use the “real” SP
-      TEST-samltest-id-sp.xml: >-
-        {{ lookup("template", "TEST-samltest-id-sp.xml") }}
+      # The SP credentials for the “catalyse-test-proj” Catalyse instance:
+      ivalua-sp.xml: >-
+        {{ lookup("template", "ivalua-sp--catalyse.xml" if inventory_environment == "prod"
+                               else "ivalua-sp--catalyse-test-proj.xml" ) }}
   register: _satosa_configmap
 
 - name: Generate keypair for SATOSA (in case we need one)
