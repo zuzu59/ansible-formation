@@ -15,7 +15,12 @@ BACKEND_MODULES:
 FRONTEND_MODULES:
   - "{{ satosa_configmap_mountpoint }}/saml2_frontend.yaml"
 
-MICRO_SERVICES: []
+MICRO_SERVICES:
+  - "{{ satosa_configmap_mountpoint }}/ivalua_account_activation_microservice.yaml"
+
+CUSTOM_PLUGIN_MODULE_PATHS:
+  - "{{ satosa_configmap_mountpoint }}/"
+
 
 LOGGING:
   version: 1

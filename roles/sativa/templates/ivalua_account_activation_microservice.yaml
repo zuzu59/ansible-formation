@@ -1,0 +1,12 @@
+module: ivalua_account_activation_microservice.IValuaAccountActivationMicroservice
+name: IValuaAccountActivationMicroservice
+config:
+  epfl:
+    websrv:
+      url: "{{ websrv_api.url }}"
+      app_name: "{{ websrv_api.name }}"
+      app_caller: "{{ websrv_api.caller }}"
+      app_password: "{{ websrv_api.password }}"
+    catalyse:
+      url: "{{ catalyse_api.url }}"
+      key: "{{ catalyse_api.key }}"

@@ -24,6 +24,10 @@
       ivalua-sp.xml: >-
         {{ lookup("template", "ivalua-sp--catalyse.xml" if inventory_environment == "prod"
                                else "ivalua-sp--catalyse-test-proj.xml" ) }}
+      ivalua_account_activation_microservice.yaml: >-
+        {{ lookup("template", "ivalua_account_activation_microservice.yaml") }}
+      ivalua_account_activation_microservice.py: >-
+        {{ lookup("template", "ivalua_account_activation_microservice.py") }}
   register: _satosa_configmap
 
 - name: Generate keypair for SATOSA (in case we need one)

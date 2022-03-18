@@ -11,3 +11,28 @@ sativa_tequila_server: >-
   {{ "tequila.epfl.ch" if inventory_environment == "prod"
   else "test-tequila.epfl.ch"
   }}
+
+_satosa_secrets_keybase_team: >-
+  {{ "epfl_catalyse.iam.test" if inventory_environment == "test"
+     else "epfl_catalyse.iam.prod" }}
+_satosa_secrets_keybase_file: "/keybase/team/{{ _satosa_secrets_keybase_team }}/satosa.yml"
+_satosa_secrets: >
+  {{ lookup( 'pipe', 'keybase fs read {{ _satosa_secrets_keybase_file }}')
+  | from_yaml }}
+
+websrv_api:
+  url: >-
+    {{ "https://websrv.epfl.ch/" if inventory_environment == "prod"
+    else "https://test-websrv.epfl.ch/"
+    }}
+  name: catalyse
+  caller: '000000'
+  password: "{{ _satosa_secrets.websrv_api.password }}"
+
+# TODO: where does catalyse-test.epfl.ch fit in?
+catalyse_hostname: >-
+  {{ "catalyse-test-proj.epfl.ch" if inventory_environment == "test"
+  else "catalyse-buyer.epfl.ch" }}
+catalyse_api:
+  url: "https://{{ catalyse_hostname }}/page.aspx/en/eai/api/"
+  key: "{{ _satosa_secrets.catalyse_api.key }}"
