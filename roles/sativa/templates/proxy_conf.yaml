@@ -15,8 +15,7 @@ BACKEND_MODULES:
 FRONTEND_MODULES:
   - "{{ satosa_configmap_mountpoint }}/saml2_frontend.yaml"
 
-MICRO_SERVICES: 
-  - "{{ satosa_configmap_mountpoint }}/static_attributes.yaml"
+MICRO_SERVICES: []
 
 LOGGING:
   version: 1

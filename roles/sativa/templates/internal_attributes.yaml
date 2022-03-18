@@ -1,45 +1,28 @@
-{# We have no idea what this does. #}
+# How SATOSA transforms SAML2 credentials (so-called “subject”, part
+# of the “assertion”; and “attributes”, part of “attribute statement”;
+# both signed)
+
+# Which attributes go into the frontend-side attribute statement.
+#
+# Keys of this dict correspond to what SATOSA sends to the SP (iValua)
+#
+# Values are the corresponding names on to pick from the back-end side
+# (Tequila), with a fallback order as the second-order values.
+# (If we were federating several back-end IdPs, which we aren't, we
+# could have several intermediate-level keys.)
+#
+# If the dict is empty, there are no attributes at all.
+
 attributes:
-  address:
-    openid: [address.street_address]
-    orcid: [addresses.str]
-    saml: [postaladdress]
-  displayname:
-    openid: [nickname]
-    orcid: [name.credit-name]
-    github: [login]
-    saml: [displayName]
-  edupersontargetedid:
-    facebook: [id]
-    linkedin: [id]
-    orcid: [orcid]
-    github: [id]
-    openid: [sub]
-    saml: [eduPersonTargetedID,eduPersonUniqueId]
-  givenname:
-    facebook: [first_name]
-    linkedin: [email-address]
-    orcid: [name.given-names.value]
-    openid: [given_name]
-    saml: [givenName]
+  # This is the minimal map that simply forwards everything that
+  # Tequila sends us (under its default configuration):
+  edupersonuniqueid:
+    saml: [eduPersonUniqueId]
   mail:
-    facebook: [email]
-    linkedin: [email-address]
-    orcid: [emails.str]
-    github: [email]
-    openid: [email]
-    saml: [email, emailAdress, mail]
-  name:
-    facebook: [name]
-    orcid: [name.credit-name]
-    github: [name]
-    openid: [name]
-    saml: [cn]
+    saml: [mail]
+  givenname:
+    saml: [givenName]
   surname:
-    facebook: [last_name]
-    linkedin: [lastName]
-    orcid: [name.family-name.value]
-    openid: [family_name]
-    saml: [sn, surname]
-user_id_from_attrs: [edupersontargetedid]
-user_id_to_attr: edupersontargetedid
+    saml: [sn]
+  uid:
+    saml: [uid]
