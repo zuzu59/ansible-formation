@@ -101,12 +101,14 @@
     apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
-      name: sativa
+      name: '{{ sativa_deploy_name }}'
       namespace: '{{ openshift_namespace }}'
+      labels:
+        app: satosa-proxy
     spec:
       replicas: 1
       selector:
-        deployment-config.name: sativa
+        deployment-config.name: '{{ sativa_deploy_name }}'
       # `strategy:` configures resources and other parameters for
       # the upgrade process.
       strategy:
@@ -116,7 +118,7 @@
       template:
         metadata:
           labels:
-            deployment-config.name: sativa
+            deployment-config.name: '{{ sativa_deploy_name }}'
         spec:
           containers:
             - name: satosa
@@ -201,7 +203,7 @@
           protocol: TCP
           targetPort: 8000
       selector:
-        deployment-config.name: sativa
+        deployment-config.name: '{{ sativa_deploy_name }}'
 
 - name: Route for catalyse-login
   openshift:

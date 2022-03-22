@@ -21,6 +21,11 @@ satosa_secrets: >
   {{ lookup( 'pipe', 'keybase fs read {{ _satosa_secrets_keybase_file }}')
   | from_yaml }}
 
+sativa_deploy_name: >-
+  {{ "sativa-prod" if inventory_environment == "prod"
+  else "sativa-test"
+  }}
+
 websrv_api:
   url: >-
     {{ "https://websrv.epfl.ch/" if inventory_environment == "prod"
