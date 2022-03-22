@@ -5,7 +5,7 @@ satosa_secrets_mountpoint: /opt/satosa/secrets
 
 sativa_server_hostname: >-
   {{ "catalyse-login.epfl.ch" if inventory_environment == "prod"
-  else "catalyse-login.128.178.222.83.nip.io"
+  else "catalyse-login-test.epfl.ch"
   }}
 
 sativa_tequila_server: >-

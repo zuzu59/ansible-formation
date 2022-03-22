@@ -185,7 +185,7 @@
   tags:
     - sativa.satosa.restart
 
-- name: Service for Statosa
+- name: Service for Satosa
   openshift:
     apiVersion: v1
     kind: Service
@@ -214,7 +214,7 @@
         app: satosa-route
         epfl.ch/visibility: public
     spec:
-      host: "catalyse-login.128.178.222.83.nip.io"
+      host: "{{ sativa_server_hostname }}"
       tls:
         termination: edge
       port:
