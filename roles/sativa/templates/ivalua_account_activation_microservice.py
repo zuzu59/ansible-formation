@@ -36,23 +36,28 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
     :param internal_response: the response
     :return: response
     """
-    satosa_logging(logger, logging.DEBUG, "ivalua microservice process", "XXX")
+    satosa_logging(logger, logging.INFO, "Ivalua microservice process", context.state)
 
     # import pydevd; pydevd.settrace(open("/tmp/DEBUG-HOST").read(), port=int(open("/tmp/DEBUG-PORT").read()),  stdoutToServer=True, stderrToServer=True)
 
-    satosa_logging(logger, logging.DEBUG, json.dumps(internal_response.data['attributes']), None)
-    self.sciper = internal_response.data['subject_id']
-    satosa_logging(logger, logging.DEBUG, "SCIPER = %s" % self.sciper, None)
-    # Get Catalyse URL from SP entity ID URL ex "sp_entity_id":"https://catalyse-test-proj.epfl.ch"
-    self.sp_entity_id = context.state["SAML-of-Catalyse"]["resp_args"]["sp_entity_id"]
-    satosa_logging(logger, logging.DEBUG, "SP entity id = %s" % self.sp_entity_id, None)
+    try:
+      satosa_logging(logger, logging.DEBUG, "Attributes : %s" % json.dumps(internal_response.data['attributes']), context.state)
+      # Get SCIPER (SAML NameID => subject_id)
+      self.sciper = internal_response.data['subject_id']
+      satosa_logging(logger, logging.DEBUG, "SCIPER = %s" % self.sciper, context.state)
 
+      # Get Catalyse URL from SP entity ID URL ex "sp_entity_id"="https://catalyse-test-proj.epfl.ch"
+      self.sp_entity_id = context.state[context.state["ROUTER"]]["resp_args"]["sp_entity_id"]
+      satosa_logging(logger, logging.DEBUG, "SP entity id = %s" % self.sp_entity_id, context.state)
+    except Exception as e:
+      satosa_logging(logger, logging.ERROR, repr(e) + traceback.format_exc(), context.state)
 
     try:
       if self.get_sig0000(self.sciper):
-        self.postToCatalyse(self.sciper, self.sp_entity_id)
+        if self.postToCatalyse(self.sciper, self.sp_entity_id):
+          satosa_logging(logger, logging.INFO, "User %s was successfully validated in Ivalua" %  self.sciper, context.state)
     except Exception as e:
-      satosa_logging(logger, logging.ERROR, repr(e) + traceback.format_exc(), None)
+      satosa_logging(logger, logging.ERROR, repr(e) + traceback.format_exc(), context.state)
 
     # import pydevd; pydevd.settrace(open("/tmp/DEBUG-HOST").read(), port=int(open("/tmp/DEBUG-PORT").read()),  stdoutToServer=True, stderrToServer=True)
 
@@ -70,7 +75,7 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
     satosa_logging(logger, logging.DEBUG, "Getting data from %s " %  url, None)
 
     r = requests.get(url, params=qs, allow_redirects=False)
-    satosa_logging(logger, logging.DEBUG, "get_sig0000 status %d" %  r.status_code, None)
+    satosa_logging(logger, logging.INFO, "get_sig0000 status %d" %  r.status_code, None)
 
     if r.status_code != 200:
       satosa_logging(logger, logging.ERROR, "Non-200 response, body is %s" % r.text, None)
@@ -79,7 +84,7 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
 
     if not response.get('result'):
       satosa_logging(logger, logging.ERROR, "Negative API response: %s" % r.text, None)
-      return false
+      return False
 
     return len(response['result']) > 0
 
@@ -88,12 +93,16 @@ class IValuaAccountActivationMicroservice(ResponseMicroService):
       url = sp_entity_id + "/page.aspx/en/eai/api/"
     else:
       url = self.catalyse['url']
-    satosa_logging(logger, logging.DEBUG, "postToCatalyse base Url: %s" % url, None)
+    url = url + 'User_VAL'
+    satosa_logging(logger, logging.INFO, "Updating data to %s" % url, None)
 
-    url = url + 'User_VAL?apikey=' + self.secrets['catalyse_key']
+    url = url + '?apikey=' + self.secrets['catalyse_key'] # add apikey
     payload = '<User_VALs><User_VAL><LOGIN_NAME>'+sciper+'</LOGIN_NAME></User_VAL></User_VALs>'
     headers = {'Content-Type': 'application/xml'}
 
     r = requests.post(url=url, data=payload, headers=headers, allow_redirects=False)
     satosa_logging(logger, logging.DEBUG, "postToCatalyse status %d" % r.status_code, None)
+    if r.status_code != 200:
+      satosa_logging(logger, logging.ERROR, "Non-200 response, body is %s" % r.text, None)
+
     return r.status_code == 200
