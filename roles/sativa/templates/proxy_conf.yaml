@@ -68,6 +68,8 @@ LOGGING:
       level: "DEBUG"
     oic:
       level: "DEBUG"
+    ivalua_account_activation_microservice:
+      level: "DEBUG"
   root:
     level: "INFO"  # Lest we leak e.g. secrets as part of API URLs
     handlers:
