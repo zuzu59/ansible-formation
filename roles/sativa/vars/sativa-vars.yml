@@ -13,6 +13,11 @@ sativa_tequila_server: >-
   else "test-tequila.epfl.ch"
   }}
 
+sativa_tequila_server_metadata_url: >-
+  {{ "/metadata.tequila-IdP.xml" if inventory_environment == "prod"
+  else "/metadata.test-tequila-IdP.xml"
+  }}
+
 _satosa_secrets_keybase_team: >-
   {{ "epfl_catalyse.iam.test" if inventory_environment == "test"
      else "epfl_catalyse.iam.prod" }}

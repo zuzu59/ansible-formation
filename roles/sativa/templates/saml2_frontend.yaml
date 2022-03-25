@@ -4,7 +4,7 @@ config:
 
   endpoints:
     single_sign_on_service:
-      'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST': /v2/OAUTH2IdP/auth
+      'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST': v2/OAUTH2IdP/auth
       'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect': sso/redirect
 
   entityid_endpoint: true
@@ -32,16 +32,16 @@ config:
         ui_info:
           display_name:
             - lang: en
-              text: "IdP Display Name"
+              text: "Proxy Satosa IdP"
           description:
             - lang: en
-              text: "IdP Description"
+              text: "Proxy Satosa IdP"
           information_url:
             - lang: en
-              text: "http://idp.information.url/"
+              text: "{{ sativa_server_hostname }}"
           privacy_statement_url:
             - lang: en
-              text: "http://idp.privacy.url/"
+              text: "{{ sativa_server_hostname }}"
           keywords:
             - lang: se
               text: ["Satosa", "IdP-SE"]

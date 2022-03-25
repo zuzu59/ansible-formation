@@ -12,7 +12,7 @@ config:
     key_file: /opt/satosa/ssl/backend.key
     cert_file: /opt/satosa/ssl/backend.crt
     organization:
-      display_name: Catalyse SATOSA test
+      display_name: Catalyse SATOSA
       name: EPFL
       url: 'http://www.epfl.ch'
     contact_person:
@@ -25,7 +25,7 @@ config:
 
     metadata:
       remote:
-        - url: "https://{{ sativa_tequila_server }}/metadata.test-tequila-IdP.xml"
+        - url: "https://{{ sativa_tequila_server }}{{ sativa_tequila_server_metadata_url }}"
           cert: /opt/satosa/tequila/tequila.pem
 
     entityid: "<base_url>/<name>/proxy_saml2_backend.xml"
@@ -35,16 +35,16 @@ config:
         ui_info:
           display_name:
             - lang: en
-              text: "Catalyse IValua"
+              text: "Catalyse Ivalua"
           description:
             - lang: en
-              text: "Catalyse IValua"
+              text: "Catalyse Ivalua"
           information_url:
             - lang: en
-              text: "http://confluence.epfl.ch:8443/Fsck-you-you-dont-have-confluence-access-anyway"
+              text: "{{ catalyse_hostname }}"
           privacy_statement_url:
             - lang: en
-              text: "http://sp.privacy.url/"
+              text: "{{ catalyse_hostname }}"
           keywords:
             - lang: se
               text: ["Satosa", "SP-SE"]
@@ -68,4 +68,4 @@ config:
         # name_id_format: 'None'
         name_id_format_allow_create: true
   # disco_srv must be defined if there is more than one IdP in the metadata specified above
-  disco_srv: http://disco.example.com
+  # disco_srv: http://disco.example.com

@@ -177,7 +177,7 @@
 - name: Restart Satosa now
   shell:
     cmd: |-
-      oc -n {{ openshift_namespace }} rollout latest dc/sativa
+      oc -n {{ openshift_namespace }} rollout latest dc/{{ sativa_deploy_name }}
   when: >-
     ("sativa.satosa.restart" in ansible_run_tags)
     or
