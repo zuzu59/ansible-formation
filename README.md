@@ -11,3 +11,7 @@ A reverse-proxy built out of Apache and mod_auth_tequila, that protects Jaggaer 
 ### `roles/satosa`
 
 An instance of [SATOSA](https://github.com/IdentityPython/SATOSA) to auto-reactivate Catalyse-Buyer accounts as people log in either for the first time, or after a 6-month period of inactivity.
+
+Commande to deploy SATOSA :
+	
+	./cataiamsible [--prod] -t sativa
