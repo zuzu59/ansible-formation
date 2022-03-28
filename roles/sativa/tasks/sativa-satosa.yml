@@ -158,6 +158,16 @@
                   ln -s /opt/satosa/config/* /opt/satosa/etc/
                   ln -s /opt/satosa/ssl/* /opt/satosa/etc/
                   exec bash -x /start.sh
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /SAML-of-Catalyse/proxy.xml
+                  port: 8000
+                  scheme: HTTP
+                initialDelaySeconds: 60
+                periodSeconds: 60
+                successThreshold: 1
+                timeoutSeconds: 10
           volumes:
             - name: satosa-config
               configMap:
