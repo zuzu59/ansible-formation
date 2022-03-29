@@ -1,6 +1,6 @@
 # Ansible formation
 
-zf220329.1520
+zf220329.1529
 
 Petit dépôt pour démarrer une formation Ansible qui utilise ansible-suitecase.
 
@@ -8,12 +8,22 @@ J'ai pris comme *source* le dépôt:
 
 https://github.com/epfl-si/catalyse-iam.ops
 
-Et après, je l'ai *tordu* pour le rendre générique à la formation. Donc il va sûrement rester des *trace* du dépôt original qui n'auront rien à voir avec CE dépôt !
+Et après, je l'ai *tordu* pour le rendre générique à la formation. Donc il va sûrement rester des *trace* du dépôt *original source* qui n'auront rien à voir avec CE dépôt !
+
+
+Je me suis aussi inspiré de l'*ansibilisation* du service **go.epfl.ch**:
+
+https://gitlab.com/epfl-isasfsd/go-ops/-/tree/master/ansible
 
 
 
 
-Tout ce qui suit apartient au dépôt *original source*
+
+
+
+
+
+# Tout ce qui suit apartient au dépôt *original source*
 
 
 
