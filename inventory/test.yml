@@ -5,25 +5,28 @@ all:
       ansible_port: 22
       ansible_user: ubuntu
       toto_dir: "/home/ubuntu/toto1204"
+      web_server_msg: "Salut, c'est le serveur lindo-test"
 
       ### Secrets env vars ######################################
       _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_test/secrets.yml') | from_yaml }}"
 
 
-    # lindo-test1:
-    #   ansible_host: 86.119.34.139
-    #   ansible_port: 22
-    #   ansible_user: ubuntu
-    #   toto_dir: "/home/ubuntu/toto1204"
-    # 
-    #   ### Secrets env vars ######################################
-    #   _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_test/secrets.yml') | from_yaml }}"
-    # 
-    # lindo-test2:
-    #   ansible_host: 86.119.35.128
-    #   ansible_port: 22
-    #   ansible_user: ubuntu
-    #   toto_dir: "/home/ubuntu/toto1204"
-    # 
-    #   ### Secrets env vars ######################################
-    #   _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_test/secrets.yml') | from_yaml }}"
+    lindo-test1:
+      ansible_host: 86.119.34.139
+      ansible_port: 22
+      ansible_user: ubuntu
+      toto_dir: "/home/ubuntu/toto1204"
+      web_server_msg: "Hello, c'est le serveur lindo-test1"
+    
+      ### Secrets env vars ######################################
+      _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_test/secrets.yml') | from_yaml }}"
+    
+    lindo-test2:
+      ansible_host: 86.119.35.128
+      ansible_port: 22
+      ansible_user: ubuntu
+      toto_dir: "/home/ubuntu/toto1204"
+      web_server_msg: "Hi, c'est le serveur lindo-test2"
+    
+      ### Secrets env vars ######################################
+      _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_test/secrets.yml') | from_yaml }}"

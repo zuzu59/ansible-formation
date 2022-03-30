@@ -10,4 +10,17 @@
       - "8181:80"
   tags: web-server
   
-  
+# - name: Crée le fichier de bienvenue sur le serveur WEB
+#   ansible.builtin.shell:
+#     cmd: echo "{{ web_server_msg }}" > /home/ubuntu/web/index.html
+#     chdir: /home/ubuntu
+#   tags: web-msg
+#   become: yes
+
+- name: Crée le fichier de bienvenue sur le serveur WEB
+  ansible.builtin.template:
+    src: index.html
+    dest: /home/ubuntu/web/index.html
+  become: yes
+  tags: web-msg
+
