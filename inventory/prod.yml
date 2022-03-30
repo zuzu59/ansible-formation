@@ -4,6 +4,8 @@ all:
       ansible_host: 86.119.42.142
       ansible_port: 22
       ansible_user: ubuntu
+      toto-dir: "/home/ubuntu/tutu1204"
+
 
       ### Secrets env vars ######################################
       _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_prod/secrets.yml') | from_yaml }}"

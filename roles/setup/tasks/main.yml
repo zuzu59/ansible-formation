@@ -10,8 +10,31 @@
   tags:
     - install
     
+
+- tags: all
+  include_vars: setup-vars.yml
+
+
+- name: Copié le fichier toto.txt
+  ansible.builtin.copy:
+    src: ./toto.txt
+    dest: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
     
 
+- name: Création du dossier toto-dir
+  ansible.builtin.file:
+    path: "{{ toto_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Création du dossier tutu-dir
+  ansible.builtin.file:
+    path: "{{ tutu_dir }}"
+    state: directory
+    mode: '0755'
 
 
 # - include_tasks:
