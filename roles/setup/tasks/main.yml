@@ -1,0 +1,42 @@
+---
+- name: install useful packages
+  apt:
+    name:
+      - htop
+      - tree
+    state: present
+    force_apt_get: yes
+  become: yes
+  tags:
+    - install
+    
+    
+
+
+
+# - include_tasks:
+#     file: sativa-satosa.yml
+#     apply:
+#       tags: sativa
+#   tags:
+#     - sativa
+#     - sativa.satosa.restart
+# 
+# - pause:
+#     prompt: |
+#       *******************************************************
+#       * SATOSA backend → Tequila cryptographic introduction *
+#       *******************************************************
+# 
+#       Please ensure that the {{ inventory_environment }} Tequila knows about
+#       the SATOSA IdP-side (“backend”) identity, available at
+#       https://{{ sativa_server_hostname }}/Sativa/proxy_saml2_backend.xml
+# 
+#       Please ensure also that the {{ inventory_environment }} Ivalua knows about
+#       the SATOSA SP-side (“frontend”) identity, available at
+#       https://{{ sativa_server_hostname }}/SAML-of-Catalyse/proxy.xml
+# 
+#       This is a manual step. Press Enter when done...
+# 
+#   tags:
+#     - sativa
