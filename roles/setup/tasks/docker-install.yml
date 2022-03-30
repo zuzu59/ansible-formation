@@ -1,0 +1,38 @@
+---
+- name: Add Docker GPG key
+  apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+  become: yes
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+  become: yes
+
+- name: Install Docker and list of packages
+  apt:
+    name: ['apt-transport-https','ca-certificates','curl','software-properties-common','docker-ce','python3-pip']
+    state: present
+    update_cache: yes
+  become: yes
+
+  
+- name: remove pip docker-py
+  pip:
+    name: docker-py
+    state: absent
+  become: yes
+
+
+- name: install docker for pip
+  pip:
+    name: docker
+    state: present
+  become: yes
+
+- name: ensure dojo user in docker group
+  user:
+    name: ubuntu
+    append: yes
+    groups: docker
+    state: present
+  become: yes

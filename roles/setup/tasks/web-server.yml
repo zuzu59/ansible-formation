@@ -1,0 +1,13 @@
+- name: WEB server start
+  docker_container:
+    container_default_behavior: compatibility
+    name: test-apache-hello-world
+    state: started
+    image: httpd:2.4
+    volumes:
+      - /home/ubuntu/web:/usr/local/apache2/htdocs/
+    ports:
+      - "8181:80"
+  tags: web-server
+  
+  

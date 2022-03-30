@@ -22,7 +22,7 @@
     - install_packages
     
 
-- name: Copié le fichier toto.txt
+- name: Copie le fichier toto.txt
   ansible.builtin.copy:
     src: ./toto.txt
     dest: /home/ubuntu
@@ -37,6 +37,7 @@
     state: directory
     mode: '0755'
 
+
 - name: Création du dossier tutu-dir
   ansible.builtin.file:
     path: "{{ tutu_dir }}"
@@ -44,29 +45,22 @@
     mode: '0755'
 
 
-# - include_tasks:
-#     file: sativa-satosa.yml
-#     apply:
-#       tags: sativa
-#   tags:
-#     - sativa
-#     - sativa.satosa.restart
-# 
-# - pause:
-#     prompt: |
-#       *******************************************************
-#       * SATOSA backend → Tequila cryptographic introduction *
-#       *******************************************************
-# 
-#       Please ensure that the {{ inventory_environment }} Tequila knows about
-#       the SATOSA IdP-side (“backend”) identity, available at
-#       https://{{ sativa_server_hostname }}/Sativa/proxy_saml2_backend.xml
-# 
-#       Please ensure also that the {{ inventory_environment }} Ivalua knows about
-#       the SATOSA SP-side (“frontend”) identity, available at
-#       https://{{ sativa_server_hostname }}/SAML-of-Catalyse/proxy.xml
-# 
-#       This is a manual step. Press Enter when done...
-# 
-#   tags:
-#     - sativa
+- name: Docker install
+  import_tasks:
+    file: docker-install.yml
+  tags:
+    - docker-install
+
+
+- name: WEB server install
+  import_tasks:
+    file: web-server.yml
+  tags:
+    - web-server-install
+
+
+
+
+
+
+
