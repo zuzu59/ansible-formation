@@ -1,12 +1,104 @@
-- name: erm-proxy
+- name: Setup project
   hosts: all
-  gather_facts: no
   roles:
-    - role: roles/erm-proxy
+    - name: ../roles/setup
+  tags:
+    - setup
 
-- name: Sativa
+# - name: Developer comfort
+#   hosts: all
+#   roles:
+#     - name: ../roles/comfort
+#   tags:
+#     - comfort
+
+- name: Setup postgres database
   hosts: all
-  gather_facts: no
   roles:
-    - role: roles/sativa
+    - name: ../roles/services/postgres
+  tags:
+    - go_postgres
 
+- name: Setup php framework
+  hosts: all
+  roles:
+    - name: ../roles/services/php-fpm
+  tags:
+    - go_php
+
+- name: Setup nginx server
+  hosts: all
+  roles:
+    - name: ../roles/services/nginx
+  tags:
+    - go_nginx
+
+- name: Setup workspace-utils
+  hosts: all
+  roles:
+    - name: ../roles/services/workspace-utilities
+  tags:
+    - go_workspace
+
+- name: Setup traefik proxy
+  hosts: all
+  roles:
+    - name: ../roles/services/traefik
+  tags:
+    - go_traefik
+
+- name: Setup prometheus
+  hosts: all
+  roles:
+    - name: ../roles/services/prometheus
+  tags:
+    - go_prometheus
+
+- name: Setup node-exporter
+  hosts: all
+  roles:
+    - name: ../roles/services/node-exporter
+  tags:
+    - go_node-exporter
+
+- name: Setup postgres exporter
+  hosts: all
+  roles:
+    - name: ../roles/services/postgres-exporter
+  tags:
+    - go_postgres-exporter
+
+- name: Setup cadvisor
+  hosts: all
+  roles:
+    - name: ../roles/services/cadvisor
+  tags:
+    - go_cadvisor
+
+- name: Setup php-fpm-exporter
+  hosts: all
+  roles:
+    - name: ../roles/services/php-fpm-exporter
+  tags:
+    - go_php-fpm-exporter
+
+- name: Setup nginx exporter
+  hosts: all
+  roles:
+    - name: ../roles/services/nginx-exporter
+  tags:
+    - go_nginx-exporter
+
+- name: Setup twitter bot
+  hosts: all
+  roles:
+    - name: ../roles/services/twitter-bot
+  tags:
+    - go_twitter_bot
+
+- name: Setup config
+  hosts: all
+  roles:
+    - name: ../roles/config
+  tags:
+    - go_config

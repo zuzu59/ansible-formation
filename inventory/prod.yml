@@ -1,8 +1,11 @@
 all:
   hosts:
-    catalyse-prod:
-      openshift_namespace: catalyse-prod
-      ansible_connection: local
-      ansible_python_interpreter: "{{ catiamsible_dir }}/ansible-deps-cache/bin/python3"
-      inventory_environment: prod
+    ansible3:
+      ansible_host: a.b.c.d
+      ansible_port: 22
+      ansible_user: ubuntu
+
+      ### Secrets env vars ######################################
+      _go_secrets: "{{ lookup('file', '/keybase/team/epfl_idevfsd/ansible-formation/infra_prod/secrets.yml') | from_yaml }}"
+
 

@@ -1,14 +1,15 @@
 #!/bin/bash
+# zf220330.0918
 #
 # This is a wrapper around ansible / ansible-playbook.
 #
 # Usage ("ansible" mode):
 #
-#   ./ansible/catiamsible -m raw all -a 'date'
+#   ./startsible
 #
 # Usage ("ansible-playbook" mode):
 #
-#   ./ansible/catiamsible -l prod
+#   ./startsible -l prod
 #
 #
 # If you are unfamiliar with Ansible, read up on it at
@@ -51,15 +52,15 @@ platform_check () {
     export PATH="$PWD/ansible-deps-cache/bin:$PATH"
     export ANSIBLE_ROLES_PATH="$PWD/ansible-deps-cache/roles"
     export ANSIBLE_COLLECTIONS_PATHS="$PWD/ansible-deps-cache"
-    oc_check
+#    oc_check
 }
 
-oc_check () {
-  if ! oc projects >/dev/null 2>&1; then
-    echo "Please login to openshift:"
-    oc login
-  fi
-}
+# oc_check () {
+#   if ! oc projects >/dev/null 2>&1; then
+#     echo "Please login to openshift:"
+#     oc login
+#   fi
+# }
 
 inventory_mode="test"
 inventories () {
@@ -76,7 +77,7 @@ inventories () {
 mode=ansible-playbook
 
 declare -a ansible_args
-ansible_args=(-e "catiamsible_dir=$OLDPWD")
+ansible_args=(-e "startsible_dir=$OLDPWD")
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
