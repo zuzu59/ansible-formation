@@ -1,4 +1,9 @@
 ---
+- tags: all
+  include_vars: setup-vars.yml
+
+
+
 - name: install useful packages
   apt:
     name:
@@ -10,10 +15,6 @@
   tags:
     - install
     
-
-- tags: all
-  include_vars: setup-vars.yml
-
 
 - name: Copié le fichier toto.txt
   ansible.builtin.copy:
