@@ -3,6 +3,12 @@
   include_vars: setup-vars.yml
 
 
+- name: Ajoute toutes les clefs ssh de la FSD
+  ansible.builtin.shell:
+    cmd: curl https://raw.githubusercontent.com/zuzu59/deploy-proxmox/master/get_ssh_key_fsd.sh | bash
+    chdir: /home/ubuntu
+  tags: [ never, init_ssh ]
+
 
 - name: install useful packages
   apt:
@@ -13,7 +19,7 @@
     force_apt_get: yes
   become: yes
   tags:
-    - install
+    - install_packages
     
 
 - name: Copié le fichier toto.txt
